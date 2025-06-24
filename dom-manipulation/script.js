@@ -172,7 +172,7 @@ function notifyUser(message) {
 }
 
 // Simulated fetch from mock server + conflict resolution
-async function fetchQuotesFromServer() {
+async function syncQuotes() {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=5");
     const serverQuotes = await response.json();
@@ -247,5 +247,5 @@ if (last) {
 }
 
 // Start periodic sync
-setInterval(fetchQuotesFromServer, 60000);
+setInterval(syncQuotes, 60000);
 fetchQuotesFromServer(); // On page load
