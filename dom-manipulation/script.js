@@ -1,3 +1,20 @@
+async function postQuoteToServer(quote) {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(quote)
+    });
+
+    const data = await response.json();
+    console.log("Quote posted to server:", data);
+  } catch (error) {
+    console.error("Failed to post quote to server:", error);
+  }
+}
+
 let quotes = [];
 
 const quoteDisplay = document.getElementById("quoteDisplay");
@@ -97,9 +114,12 @@ function addQuote() {
     return;
   }
 
-  quotes.push({ text, category });
-  saveQuotes();
-  populateCategories();
+ quotes.push({ text, category });
+saveQuotes();
+populateCategories();
+
+// Post to server (simulate sync)
+postQuoteToServer({ text, category });
 
   document.getElementById("newQuoteText").value = "";
   document.getElementById("newQuoteCategory").value = "";
