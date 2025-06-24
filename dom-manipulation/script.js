@@ -182,20 +182,21 @@ async function syncQuotes() {
       category: "Server"
     }));
 
-    const current = quotes.slice(0, 5);
-    const conflict = JSON.stringify(current) !== JSON.stringify(formatted);
+    const localSnapshot = quotes.slice(0, 5);
+    const conflict = JSON.stringify(localSnapshot) !== JSON.stringify(formatted);
 
     if (conflict) {
       quotes = [...formatted, ...quotes.slice(5)];
       saveQuotes();
       populateCategories();
-      notifyUser("Synced with server. Server data took priority.");
+      notifyUser("Quotes synced with server! Server version replaced local data.");
     }
   } catch (error) {
-    console.error("Failed to sync with server:", error);
-    notifyUser("Failed to sync with server.");
+    console.error("Sync failed:", error);
+    notifyUser("Failed to sync quotes from server.");
   }
 }
+
 
 // Export quotes to JSON file
 function exportToJsonFile() {
