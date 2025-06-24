@@ -152,7 +152,7 @@ function notifyUser(message) {
 }
 
 // Simulated fetch from mock server + conflict resolution
-function fetchFromServerAndSync() {
+function fetchQuotesFromServer() {
   fetch("https://jsonplaceholder.typicode.com/posts?_limit=5")
     .then(res => res.json())
     .then(serverQuotes => {
@@ -226,5 +226,5 @@ if (last) {
 }
 
 // Start periodic sync
-setInterval(fetchFromServerAndSync, 60000);
-fetchFromServerAndSync();
+setInterval(fetchQuotesFromServerc, 60000);
+fetchQuotesFromServer();
