@@ -152,28 +152,29 @@ function notifyUser(message) {
 }
 
 // Simulated fetch from mock server + conflict resolution
-function fetchQuotesFromServer() {
-  fetch("https://jsonplaceholder.typicode.com/posts?_limit=5")
-    .then(res => res.json())
-    .then(serverQuotes => {
-      const formatted = serverQuotes.map(post => ({
-        text: post.title,
-        category: "Server"
-      }));
+async function fetchQuotesFromServer() {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=5");
+    const serverQuotes = await response.json();
 
-      const current = quotes.slice(0, 5);
-      const conflict = JSON.stringify(current) !== JSON.stringify(formatted);
+    const formatted = serverQuotes.map(post => ({
+      text: post.title,
+      category: "Server"
+    }));
 
-      if (conflict) {
-        quotes = [...formatted, ...quotes.slice(5)];
-        saveQuotes();
-        populateCategories();
-        notifyUser("Synced with server. Server data took priority.");
-      }
-    })
-    .catch(() => {
-      notifyUser("Failed to sync with server.");
-    });
+    const current = quotes.slice(0, 5);
+    const conflict = JSON.stringify(current) !== JSON.stringify(formatted);
+
+    if (conflict) {
+      quotes = [...formatted, ...quotes.slice(5)];
+      saveQuotes();
+      populateCategories();
+      notifyUser("Synced with server. Server data took priority.");
+    }
+  } catch (error) {
+    console.error("Failed to sync with server:", error);
+    notifyUser("Failed to sync with server.");
+  }
 }
 
 // Export quotes to JSON file
@@ -226,5 +227,5 @@ if (last) {
 }
 
 // Start periodic sync
-setInterval(fetchQuotesFromServerc, 60000);
-fetchQuotesFromServer();
+setInterval(fetchQuotesFromServer, 60000);
+fetchQuotesFromServer(); // On page load
